@@ -1,0 +1,63 @@
+{
+	"easycom": {
+		"autoscan": true,
+		// 注意一定要放在custom里，否则无效，https://ask.dcloud.net.cn/question/131175
+		"custom": {
+			"^u--(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"^up-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+	        "^u-([^-].*)": "uview-plus/components/u-$1/u-$1.vue"
+		}
+	},
+	
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	{
+		"path": "pages/home/index",
+		"style": {
+			"navigationBarTitleText": "首页"
+		}
+	},
+	{
+		"path": "pages/home/list",
+		"style": {
+			"navigationBarTitleText": "新闻列表"
+		}
+	},
+	{
+		"path": "pages/detail/index",
+		"style": {
+			"navigationBarTitleText": "新闻详情"
+		}
+	},
+	{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}
+	],
+	"tabBar": {
+        "backgroundColor": "#ffffff",
+        "borderStyle": "white",
+        "selectedColor": "#ff9a6a",
+        "color": "#999",
+        "list": [{
+                "pagePath": "pages/home/index",
+                "iconPath": "static/images/tab_comic_home_n.png",
+                "selectedIconPath": "static/images/tab_comic_home_p.png",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/home/list",
+                "iconPath": "static/images/tab_comic_home_n.png",
+                "selectedIconPath": "static/images/tab_comic_home_p.png",
+                "text": "新闻列表"
+            }
+        ]
+    },
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+}
