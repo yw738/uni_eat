@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { loginApi } from "@/components/api/api.js";
+import { loginApi } from "@/api/api.js";
 
 export default {
   components: {},
