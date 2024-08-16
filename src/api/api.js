@@ -1,38 +1,17 @@
-import request from "./http.js"
+import { get, post, postFormData } from "./public.js";
 
-const get = (url, data) =>
-    request({
-        url: url,
-        data
-    });
+//api
+export const eatApi = {
+  getUpList: (data) => get("/api/v1/getUpList", data),
+  getList: (data) => get("/api/v1/getList", data), //)
+  getDetail: (data) => get("/api/v1/getDetail", data), //)
 
-const post = (url, data) =>
-    request({
-        url: url,
-        method: "POST",
-        data
-    });
+  getOpenId: (data) => get("/api/getOpenId", data), //)
+  getUser: (id) => get(`/api/getUser/${id}`, {}), //)
+  addUser: (data) => post("/api/addUser", data), //)
+  updateUser: (data) => post("/api/updateUser", data), //)
 
-const postFormData = (url, data) =>
-    request({
-        url: url,
-        method: "POST",
-        data,
-        header: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-    });
-const del = (url, data) =>
-    request({
-        url: url,
-        method: "DELETE",
-        data
-    });
-
-//注册
-export const loginApi = {
-    login: (data) => post("/auth/login", data),
-    // login: (data) => postFormData("/login", data), //登录  (主要用于学生注册)
-    getList: (data) => get("/news", data), //)
-
-}
+  getAllCollection: (data) => get("/api/getAllCollection", data), //)
+  addCollection: (data) => get("/api/addCollection", data), //)
+  delCollection: (data) => get("/api/delCollection", data), //)
+};

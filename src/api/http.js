@@ -1,6 +1,6 @@
 // const BASE_URL = "http://43.143.41.25:8888";
-const BASE_URL = "/api";
-// const BASE_URL = "http://localhost:8080";
+// const BASE_URL = "/api";
+const BASE_URL = "http://localhost:8081";
 
 export default ({ url = "", method = "GET", data = {}, header = {} }) => {
     return new Promise((resolve, reject) => {

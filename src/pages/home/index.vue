@@ -11,119 +11,152 @@
       <view>更多</view>
     </view> -->
     <u-sticky>
-      <view class="flexCen selBox"> <u-tabs :list="list1" @click="click"></u-tabs>
-        <view class="flexCen" style="width:50%;">
-          <u--text type="info" @click="show = true" suffixIcon="arrow-down" text="分类"></u--text>
+      <view class="flexCen selBox">
+        <u-tabs :list="list1" @click="handClick"></u-tabs>
+        <view class="flexCen" style="width: 50%">
+          <u--text
+            type="info"
+            @click="show = true"
+            suffixIcon="arrow-down"
+            text="分类"
+          ></u--text>
           <u--text type="info" suffixIcon="arrow-down" text="城市"></u--text>
         </view>
       </view>
       <u-line></u-line>
     </u-sticky>
     <view>
-      <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y " @scrolltoupper="upper" @scrolltolower="lower"
-        @scroll="scroll">
+      <scroll-view
+        :scroll-top="scrollTop"
+        scroll-y="true"
+        class="scroll-Y"
+        @scrolltoupper="upper"
+        @scrolltolower="lower"
+        @scroll="scroll"
+      >
         <view class="list_box">
-          <view class="list" v-for="(item, index) in 10" :key="index">
-            <Card style="width:100%"></Card>
+          <view class="list" v-for="(item, index) in tableData" :key="index">
+            <Card style="width: 100%" :data="item" />
           </view>
         </view>
       </scroll-view>
     </view>
-    <u-picker :show="show" ref="uPicker" :columns="columns" @confirm="confirm" @change="changeHandler"></u-picker>
-
+    <up-picker
+      :show="show"
+      ref="uPickerRef"
+      :columns="columns"
+      @confirm="confirm"
+      @change="changeHandler"
+    ></up-picker>
   </view>
 </template>
 
-<script>
-// import { loginApi } from "@/components/api/api.js";
-import Card from "@/components/card.vue"
-export default {
-  components: { Card },
-  computed: {
-    disabled() {
-      return false;
-    },
-  },
-  data() {
-    return {
-      scrollTop: 0,
-      list1: [{
-        name: '最新',
-      }, {
-        name: '附近',
-      }],
-      show: false,
-      columns: [
-        ['中国', '美国'],
-        ['深圳', '厦门', '上海', '拉萨']
-      ],
-      columnData: [
-        ['深圳', '厦门', '上海', '拉萨'],
-        ['得州', '华盛顿', '纽约', '阿拉斯加']
-      ],
-      list: [{
-        thumb: "https://cdn.uviewui.com/uview/goods/1.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/2.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/3.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/4.jpg"
-      }, {
-        thumb: "https://cdn.uviewui.com/uview/goods/5.jpg"
-      }],
-      list3: [
-        "https://cdn.uviewui.com/uview/swiper/swiper3.png",
-        "https://cdn.uviewui.com/uview/swiper/swiper2.png",
-        "https://cdn.uviewui.com/uview/swiper/swiper1.png",
-      ],
-      indexList: [{ title: 1, content: "4444444444" }, {}], //{}, {}
-    };
-  },
-  async onShow() { },
-  methods: {
-    click(item) {
-      console.log('item', item);
-    },
-    detail(item) {
-      uni.setStorageSync("myName", item);
-      uni.navigateTo({
-        url: `/pages/detail/index`,
-      });
-    },
-    upper: function (e) {
-      console.log(e)
-    },
-    lower: function (e) {
-      console.log(e)
-    }, scroll: function (e) {
-      console.log(e)
-      this.old.scrollTop = e.detail.scrollTop
-    },
+<script setup>
+import { onMounted, reactive, ref, toRefs, defineEmits, nextTick } from "vue";
+import { onLoad, onShow, onHide, onPageScroll } from "@dcloudio/uni-app";
+import Card from "@/components/card.vue";
 
-    changeHandler(e) {
-      const {
-        columnIndex,
-        value,
-        values, // values为当前变化列的数组内容
-        index,
-        // 微信小程序无法将picker实例传出来，只能通过ref操作
-        picker = this.$refs.uPicker
-      } = e
-      // 当第一列值发生变化时，变化第二列(后一列)对应的选项
-      if (columnIndex === 0) {
-        // picker为选择器this实例，变化第二列对应的选项
-        picker.setColumnValues(1, this.columnData[index])
-      }
+import { eatApi } from "@/api/api.js";
+// import useStore from "@/store/index.js";
+// const { app } = userStore();
+// let app2 = app.appIndex;
+// console.log(useStore);
+let state = reactive({
+  scrollTop: 0,
+  list1: [
+    {
+      name: "最新",
     },
-    // 回调参数为包含columnIndex、value、values
-    confirm(e) {
-      console.log('confirm', e)
-      this.show = false
-    }
+    {
+      name: "附近",
+    },
+  ],
+  list: [
+    {
+      thumb: "https://cdn.uviewui.com/uview/goods/1.jpg",
+    },
+    {
+      thumb: "https://cdn.uviewui.com/uview/goods/2.jpg",
+    },
+    {
+      thumb: "https://cdn.uviewui.com/uview/goods/3.jpg",
+    },
+    {
+      thumb: "https://cdn.uviewui.com/uview/goods/4.jpg",
+    },
+    {
+      thumb: "https://cdn.uviewui.com/uview/goods/5.jpg",
+    },
+  ],
+  list3: [
+    "https://cdn.uviewui.com/uview/swiper/swiper3.png",
+    "https://cdn.uviewui.com/uview/swiper/swiper2.png",
+    "https://cdn.uviewui.com/uview/swiper/swiper1.png",
+  ],
+  indexList: [{ title: 1, content: "4444444444" }, {}], //{}, {}
+
+  searchData: {
+    upId: "",
+    city: "",
   },
+  tableData: [],
+  pagination: { pageSize: 20, pageIndex: 1, total: 0 },
+});
+let { scrollTop, list1, searchData, tableData, pagination } = toRefs(state);
+
+onShow(() => {
+  getList();
+});
+let handClick = (item) => {
+  console.log("item", item);
 };
 
+let getList = () => {
+  let params = JSON.parse(JSON.stringify(state.searchData));
+  // Object.assign(params, {});
+  params.pageIndex = state.pagination.pageIndex;
+  params.pageSize = state.pagination.pageSize;
+  eatApi.getList(params).then((res) => {
+    if (!state.tableData.length) {
+      state.tableData = res.data;
+    } else {
+      state.tableData.push(res.data);
+    }
+  });
+};
+
+let upper = (e) => {
+  console.log(e);
+};
+
+let lower = (e) => {
+  console.log(e);
+};
+let scroll = (e) => {};
+
+const show = ref(false);
+const columns = reactive([
+  ["中国", "美国"],
+  ["深圳", "厦门", "上海", "拉萨"],
+]);
+const columnData = reactive([
+  ["深圳", "厦门", "上海", "拉萨"],
+  ["得州", "华盛顿", "纽约", "阿拉斯加"],
+]);
+
+const uPickerRef = ref(null);
+const changeHandler = (e) => {
+  const { columnIndex, value, values, index } = e;
+
+  if (columnIndex === 0) {
+    uPickerRef.value.setColumnValues(1, columnData[index]);
+  }
+};
+
+const confirm = (e) => {
+  console.log("confirm", e);
+  show.value = false;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -148,8 +181,6 @@ export default {
     width: 50%;
   }
 }
-
-
 
 .header {
   border: 1px solid red;
