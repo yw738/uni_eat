@@ -78,7 +78,29 @@
       </view>
       <view class="flexBetween">
         <view style="width: 240rpx">
-          <up-tag
+          <up-button
+            type="primary"
+            icon="star"
+            style="width: 240rpx"
+            plain
+            color="#666"
+            v-if="isCollection"
+            @click="addCollection()"
+          >
+            收藏
+          </up-button>
+          <up-button
+            type="primary"
+            icon="star-fill"
+            style="width: 240rpx"
+            plain
+            color="#666"
+            v-if="!isCollection"
+            @click="addCollection()"
+          >
+            取消收藏
+          </up-button>
+          <!-- <up-tag
             text="收藏"
             @click="addCollection()"
             v-if="isCollection"
@@ -91,7 +113,7 @@
             @click="addCollection()"
             v-else
             icon="star-fill"
-          ></up-tag>
+          ></up-tag> -->
         </view>
         <view
           ><up-button
