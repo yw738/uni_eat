@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { loginApi } from "@/api/api.js";
+import { eatApi } from "@/api/api.js";
 
 export default {
   components: {},
@@ -34,19 +34,7 @@ export default {
   },
   methods: {
     getList() {
-      loginApi
-        .getList({
-          page: 1,
-          size: 999,
-        })
-        .then((res) => {
-          let { data = [] } = res || {};
-          this.indexList =
-            data.map((v) => ({
-              ...v,
-              tips: v.content.slice(0, 30),
-            })) || [];
-        });
+      
     },
 
     detail(item) {

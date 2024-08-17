@@ -1,5 +1,5 @@
 <template>
-  <view class="item">
+  <view class="item" @click="toDetail">
     <view class="box">
       <!-- <image style="width: 100%; height: 160rpx;" class="img" :src="src"></image> -->
       <!-- <image style="width: 200px; height: 200px; background-color: #eeeeee;" :mode="item.mode" :src="src"
@@ -12,16 +12,18 @@
         :src="item.videoImg"
       ></u--image>
       <view class="img_mask flexCen">
-        <view class="fw700">{{ item.name }}</view>
-        <view>距离999公里 {{ item.cityName }} ￥62/人</view>
+        <view class="fw700 txtOverFlow" style="width: 100%">{{
+          item.name
+        }}</view>
+        <view>距离99公里 {{ item.cityName }} ￥{{ item.avgPrice }} /人</view>
       </view>
       <view class="txt_box">
         <view class="title">
           {{ item.videoTitle }}
         </view>
         <view class="flexCen bottom_box">
-          <view class="name"> {{item.up_name}}</view>
-          <view class="time"> {{item.videoTime}} </view>
+          <view class="name txtOverFlow"> {{ item.up_name }}</view>
+          <view class="time"> {{ item.videoTime }} </view>
         </view>
       </view>
     </view>
@@ -47,6 +49,13 @@ let props = defineProps({
   },
 });
 let item = computed(() => props.data);
+
+let toDetail = () => {
+  let { id } = item.value;
+  uni.navigateTo({
+    url: `/pages/detail/index?id=${id}`,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -98,6 +107,10 @@ let item = computed(() => props.data);
 
     .bottom_box {
       margin-top: 30rpx;
+      view {
+        width: 50%;
+        font-size: 20rpx;
+      }
     }
 
     .name {
@@ -115,6 +128,11 @@ let item = computed(() => props.data);
     height: 72rpx;
     line-height: 36rpx;
     font-size: 36rpx;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
 }
 </style>
