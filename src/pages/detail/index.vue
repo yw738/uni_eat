@@ -1,6 +1,6 @@
 <template>
   <view class="content">
-    <view class="up_box marginB20 flexBetween">
+    <view v-if="false" class="up_box marginB20 flexBetween">
       <view class="flexStart">
         <up-image
           src="https://cdn.uviewui.com/uview/album/1.jpg"
@@ -30,7 +30,7 @@
       >
     </view>
 
-    <view class="flexBetween marginT10 marginB20 flexItemSt">
+    <view v-if="false" class="flexBetween marginT10 marginB20 flexItemSt">
       <view class="f16 c333"
         >瓶身描绘的牡丹一如你初妆，冉冉檀香透过窗心事我了然，</view
       >
@@ -41,7 +41,7 @@
       /> -->
       <!-- type="warning" -->
     </view>
-    <view class="img_box">
+    <view v-if="false" class="img_box">
       <up-image
         :show-loading="true"
         :src="'https://img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg'"
@@ -53,54 +53,65 @@
       <up-icon class="btn" size="50" name="play-circle"></up-icon>
       <!-- </view> -->
     </view>
-    <view class="dp_box" v-for="(item, index) in 3" :key="index">
-      <view class="flexBetween marginB10">
-        <view class="flexStart">
-          <up-image
-            src="https://cdn.uviewui.com/uview/album/2.jpg"
-            width="160rpx"
-            height="160rpx"
-            radius="10rpx"
-          />
-          <view class="marginL20 marginR20">
-            <view class="f16 c333 lh24">阿斯顿</view>
-            <view class="f14 c999 lh20">阿斯顿</view>
-            <view class="f14 c999 lh20 des">
-              瓶身描绘的牡丹一如你瓶身描绘的牡丹一如你初妆初妆，冉冉檀香透过窗
+    <up-sticky v-if="false" bgColor="#fff">
+      <up-tabs
+        lineWidth="30"
+        :list="list1"
+        class="marginT10"
+        @click="tabClick"
+      ></up-tabs>
+    </up-sticky>
+    <view v-show="active == 0">
+      <view class="dp_box" v-for="(item, index) in 3" :key="index">
+        <view class="flexBetween marginB10">
+          <view class="flexStart">
+            <up-image
+              src="https://cdn.uviewui.com/uview/album/2.jpg"
+              width="160rpx"
+              height="160rpx"
+              radius="10rpx"
+            />
+            <view class="marginL20 marginR20">
+              <view class="f16 c333 lh24">阿斯顿</view>
+              <view class="f14 c999 lh20">阿斯顿</view>
+              <view class="f14 c999 lh20 des">
+                瓶身描绘的牡丹一如你瓶身描绘的牡丹一如你初妆初妆，冉冉檀香透过窗
+              </view>
             </view>
           </view>
+          <view>
+            <up-button type="primary" shape="circle" color="#ED7043">
+              大众点评
+            </up-button></view
+          >
         </view>
-        <view>
-          <up-button type="primary" shape="circle" color="#ED7043">
-            大众点评
-          </up-button></view
-        >
-      </view>
-      <view class="flexBetween">
-        <view style="width: 240rpx">
-          <up-button
-            type="primary"
-            icon="star"
-            style="width: 240rpx"
-            plain
-            color="#666"
-            v-if="isCollection"
-            @click="addCollection()"
-          >
-            收藏
-          </up-button>
-          <up-button
-            type="primary"
-            icon="star-fill"
-            style="width: 240rpx"
-            plain
-            color="#666"
-            v-if="!isCollection"
-            @click="addCollection()"
-          >
-            取消收藏
-          </up-button>
-          <!-- <up-tag
+        <view class="flexBetween">
+          <view style="width: 240rpx">
+            <up-button
+              type="primary"
+              icon="star"
+              style="width: 240rpx"
+              plain
+              color="#666"
+              size="small"
+              v-if="isCollection"
+              @click="addCollection()"
+            >
+              收藏
+            </up-button>
+            <up-button
+              type="primary"
+              icon="star-fill"
+              style="width: 240rpx"
+              plain
+              color="#666"
+              size="small"
+              v-if="!isCollection"
+              @click="addCollection()"
+            >
+              取消收藏
+            </up-button>
+            <!-- <up-tag
             text="收藏"
             @click="addCollection()"
             v-if="isCollection"
@@ -114,33 +125,35 @@
             v-else
             icon="star-fill"
           ></up-tag> -->
+          </view>
+          <view
+            ><up-button
+              type="primary"
+              icon="map"
+              style="width: 240rpx"
+              plain
+              size="small"
+              color="#666"
+            >
+              导航
+            </up-button></view
+          >
+          <view
+            ><up-button
+              type="primary"
+              icon="phone"
+              style="width: 180rpx"
+              plain
+              size="small"
+              color="#666"
+            >
+              电话
+            </up-button></view
+          >
         </view>
-        <view
-          ><up-button
-            type="primary"
-            icon="map"
-            style="width: 240rpx"
-            plain
-            color="#666"
-          >
-            导航
-          </up-button></view
-        >
-        <view
-          ><up-button
-            type="primary"
-            icon="phone"
-            style="width: 180rpx"
-            plain
-            color="#666"
-          >
-            电话
-          </up-button></view
-        >
       </view>
     </view>
-
-    <view> </view>
+    <view v-show="active == 1">11111111 </view>
   </view>
 </template>
 
@@ -157,23 +170,20 @@ import { eatApi } from "@/api/api.js";
 let isCollection = ref(false);
 let state = reactive({
   scrollTop: 0,
+  active: 1, //
   list1: [
     {
-      name: "最新",
+      name: "列表",
     },
     {
-      name: "附近",
+      name: "地图",
     },
   ],
 
-  formData: {
-    upId: "",
-    city: "",
-  },
   tableData: [],
   pagination: { pageSize: 20, pageIndex: 1, total: 0 },
 });
-let { scrollTop, formData, tableData } = toRefs(state);
+let { scrollTop, active, list1, tableData } = toRefs(state);
 
 onLoad((options) => {
   // 页面初始化 options为页面跳转所带来的参数
@@ -222,7 +232,11 @@ const confirm = (e) => {
   console.log("confirm", e);
   show.value = false;
 };
-
+// 定义方法
+function tabClick(item) {
+  state.active = item.index;
+  console.log("item", item.name, state.active);
+}
 /**
  * 添加||取消收藏 0.8s的请求cd
  */
