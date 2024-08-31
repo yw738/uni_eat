@@ -18,20 +18,24 @@
       </view>
       <!--  color="#fff" -->
       <view>
-        <button open-type="share">
-          <up-button
-            icon="share"
-            color="#666"
-            size="small"
-            type="primary"
-            style="width: 140rpx"
-            plain
-            @click="shareFn"
-            open-type="share"
-          >
-            分享</up-button
-          >
-        </button>
+        <up-button
+          icon="share"
+          color="#666"
+          size="small"
+          type="primary"
+          style="width: 140rpx"
+          plain
+          @click="shareFn"
+          open-type="share"
+        >
+          分享</up-button
+        >
+        <!-- <button
+          class="u-button u-reset-button u-button--square u-button--small u-button--plain"
+          open-type="share"
+        >
+          分享
+        </button> -->
       </view>
     </view>
 
