@@ -1,17 +1,17 @@
 <template>
   <view class="content">
-    <view v-if="false" class="up_box marginB20 flexBetween">
+    <view class="up_box marginB20 flexBetween">
       <view class="flexStart">
         <up-image
-          src="https://cdn.uviewui.com/uview/album/1.jpg"
+          :src="upObj.up_avatar"
           width="80rpx"
           height="80rpx"
           radius="10rpx"
         />
         <view class="up">
-          <view class="f16 c333">阿斯顿</view>
+          <view class="f16 c333">{{ upObj.up_name }}</view>
           <view>
-            <text class="f12 c999 marginR10">三天前</text>
+            <text class="f12 c999 marginR10">{{ upObj.videoTime }}</text>
             <text class="f12 c666">发布探店视频</text>
           </view>
         </view>
@@ -21,19 +21,21 @@
         ><up-button
           icon="share"
           color="#666"
+          size="small"
           type="primary"
           style="width: 140rpx"
           plain
+          @click="shareFn"
+          open-type="share"
         >
           分享</up-button
-        ></view
-      >
+        >
+        <button open-type="share">分享</button>
+      </view>
     </view>
 
-    <view v-if="false" class="flexBetween marginT10 marginB20 flexItemSt">
-      <view class="f16 c333"
-        >瓶身描绘的牡丹一如你初妆，冉冉檀香透过窗心事我了然，</view
-      >
+    <view class="flexBetween marginT10 marginB20 flexItemSt">
+      <view class="f16 c333">{{ videoObj.videoTitle }}</view>
       <!-- <uni-fav
         :checked="isCollection"
         class="favBtn"
@@ -41,19 +43,19 @@
       /> -->
       <!-- type="warning" -->
     </view>
-    <view v-if="false" class="img_box">
+    <view class="img_box">
       <up-image
         :show-loading="true"
-        :src="'https://img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg'"
+        :src="videoObj.videoImg"
         width="100%"
-        height="360rpx"
+        height="320rpx"
         radius="5rpx"
       ></up-image>
       <!-- <view > -->
       <up-icon class="btn" size="50" name="play-circle"></up-icon>
       <!-- </view> -->
     </view>
-    <up-sticky v-if="false" bgColor="#fff">
+    <up-sticky bgColor="#fff">
       <up-tabs
         lineWidth="30"
         :list="list1"
@@ -62,25 +64,30 @@
       ></up-tabs>
     </up-sticky>
     <view v-show="active == 0">
-      <view class="dp_box" v-for="(item, index) in 3" :key="index">
+      <view class="dp_box" v-for="(item, index) in shopList" :key="index">
         <view class="flexBetween marginB10">
           <view class="flexStart">
-            <up-image
+            <!-- <up-image
               src="https://cdn.uviewui.com/uview/album/2.jpg"
               width="160rpx"
               height="160rpx"
               radius="10rpx"
-            />
+            /> -->
             <view class="marginL20 marginR20">
-              <view class="f16 c333 lh24">阿斯顿</view>
-              <view class="f14 c999 lh20">阿斯顿</view>
-              <view class="f14 c999 lh20 des">
-                瓶身描绘的牡丹一如你瓶身描绘的牡丹一如你初妆初妆，冉冉檀香透过窗
-              </view>
+              <view class="f16 c333 lh24">{{ item.name }}</view>
+              <view class="f14 c999 lh20">
+                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view
+              >
+              <view class="f14 c999 lh20 des"> {{ item.address }} </view>
             </view>
           </view>
           <view>
-            <up-button type="primary" shape="circle" color="#ED7043">
+            <up-button
+              type="primary"
+              shape="circle"
+              color="#ED7043"
+              v-if="item.shopUuid"
+            >
               大众点评
             </up-button></view
           >
@@ -128,6 +135,7 @@
           </view>
           <view
             ><up-button
+              v-if="item.latitude && item.longitude"
               type="primary"
               icon="map"
               style="width: 240rpx"
@@ -140,12 +148,14 @@
           >
           <view
             ><up-button
+              v-if="item.tel"
               type="primary"
               icon="phone"
               style="width: 180rpx"
               plain
               size="small"
               color="#666"
+              @click="callPhone(item.tel)"
             >
               电话
             </up-button></view
@@ -153,13 +163,23 @@
         </view>
       </view>
     </view>
-    <view v-show="active == 1">11111111 </view>
+    <view v-show="active == 1">
+      <MapCom></MapCom>
+    </view>
   </view>
 </template>
 
 <script setup>
 import { onMounted, reactive, ref, toRefs, defineEmits, nextTick } from "vue";
-import { onLoad, onShow, onHide, onPageScroll } from "@dcloudio/uni-app";
+import {
+  onLoad,
+  onShow,
+  onHide,
+  onPageScroll,
+  onShareTimeline,
+  onShareAppMessage,
+} from "@dcloudio/uni-app";
+import MapCom from "@/components/map.vue";
 import { eatApi } from "@/api/api.js";
 
 // import useStore from "@/store/index.js";
@@ -170,10 +190,10 @@ import { eatApi } from "@/api/api.js";
 let isCollection = ref(false);
 let state = reactive({
   scrollTop: 0,
-  active: 1, //
+  active: 0, //
   list1: [
     {
-      name: "列表",
+      name: "探店列表",
     },
     {
       name: "地图",
@@ -182,21 +202,48 @@ let state = reactive({
 
   tableData: [],
   pagination: { pageSize: 20, pageIndex: 1, total: 0 },
+
+  upObj: {},
+  videoObj: {},
+  shopList: [],
 });
-let { scrollTop, active, list1, tableData } = toRefs(state);
+let { scrollTop, active, list1, upObj, videoObj, shopList } = toRefs(state);
 
 onLoad((options) => {
   // 页面初始化 options为页面跳转所带来的参数
   let { id } = options;
-  // init(id);
+  init(id);
 });
+
+//分享朋友圈
+onShareTimeline((res) => {
+  return {
+    title: "", //分享的标题
+    imageUrl: "../../static/logo.png", //展示的图片，这里是本地路径的写法，也可以写http或https开头的图片路径
+    query: "from=shareTimeline", //页面打开的传参
+  };
+});
+
+// 分享到好友
+onShareAppMessage((res) => {
+  return {
+    title: "分享测试", //分享的标题
+    imageUrl: "../../static/logo.png", //展示的图片，这里是本地路径的写法，也可以写http或https开头的图片路径
+    path: "/pages/detail/index", //点击链接后跳转的页面，可以带参数
+  };
+});
+
 let handClick = (item) => {
   console.log("item", item);
 };
 
 let init = (id) => {
   eatApi.getDetail({ id: id }).then((res) => {
-    state.formData = res.data;
+    if (res.code == 0) {
+      state.upObj = res.data.upDto;
+      state.videoObj = res.data;
+      state.shopList = res.data.shopList;
+    }
   });
 };
 
@@ -207,31 +254,25 @@ let upper = (e) => {
 let lower = (e) => {
   console.log(e);
 };
-let scroll = (e) => {};
 
-const show = ref(false);
-const columns = reactive([
-  ["中国", "美国"],
-  ["深圳", "厦门", "上海", "拉萨"],
-]);
-const columnData = reactive([
-  ["深圳", "厦门", "上海", "拉萨"],
-  ["得州", "华盛顿", "纽约", "阿拉斯加"],
-]);
+// share
+let shareFn = () => {};
 
-const uPickerRef = ref(null);
-const changeHandler = (e) => {
-  const { columnIndex, value, values, index } = e;
-
-  if (columnIndex === 0) {
-    uPickerRef.value.setColumnValues(1, columnData[index]);
-  }
+// 电话
+let callPhone = (phoneStr) => {
+  let arr = phoneStr.split(",");
+  uni.makePhoneCall({
+    phoneNumber: arr[0], //仅为示例
+  });
 };
+const show = ref(false);
+const uPickerRef = ref(null);
 
 const confirm = (e) => {
   console.log("confirm", e);
   show.value = false;
 };
+
 // 定义方法
 function tabClick(item) {
   state.active = item.index;
