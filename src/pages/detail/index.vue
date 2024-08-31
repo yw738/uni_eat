@@ -17,20 +17,21 @@
         </view>
       </view>
       <!--  color="#fff" -->
-      <view
-        ><up-button
-          icon="share"
-          color="#666"
-          size="small"
-          type="primary"
-          style="width: 140rpx"
-          plain
-          @click="shareFn"
-          open-type="share"
-        >
-          分享</up-button
-        >
-        <button open-type="share">分享</button>
+      <view>
+        <button open-type="share">
+          <up-button
+            icon="share"
+            color="#666"
+            size="small"
+            type="primary"
+            style="width: 140rpx"
+            plain
+            @click="shareFn"
+            open-type="share"
+          >
+            分享</up-button
+          >
+        </button>
       </view>
     </view>
 
@@ -52,7 +53,14 @@
         radius="5rpx"
       ></up-image>
       <!-- <view > -->
-      <up-icon class="btn" size="50" name="play-circle"></up-icon>
+      <!-- bof.png -->
+      <up-image
+        :src="BfImg"
+        class="btn"
+        width="80rpx"
+        height="80rpx"
+      ></up-image>
+      <!-- <up-icon class="btn" size="50" name="play-circle"></up-icon> -->
       <!-- </view> -->
     </view>
     <up-sticky bgColor="#fff">
@@ -181,7 +189,7 @@ import {
 } from "@dcloudio/uni-app";
 import MapCom from "@/components/map.vue";
 import { eatApi } from "@/api/api.js";
-
+import BfImg from "@/static/bof.png";
 // import useStore from "@/store/index.js";
 // const { app } = userStore();
 // let app2 = app.appIndex;
