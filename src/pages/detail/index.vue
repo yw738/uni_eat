@@ -267,10 +267,10 @@ let lower = (e) => {
   console.log(e);
 };
 
-// share
+// share 
 let shareFn = () => {};
 
-// 电话
+// 电话 ok
 let callPhone = (phoneStr) => {
   let arr = phoneStr.split(",");
   uni.makePhoneCall({
