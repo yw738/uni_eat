@@ -1,13 +1,8 @@
 <template>
-  <view class="content">
+  <view class="content" enable-flex>
     <view class="up_box marginB20 flexBetween">
       <view class="flexStart">
-        <up-image
-          :src="upObj.up_avatar"
-          width="80rpx"
-          height="80rpx"
-          radius="10rpx"
-        />
+        <up-image :src="upObj.up_avatar" width="80rpx" height="80rpx" radius="10rpx" />
         <view class="up">
           <view class="f16 c333">{{ upObj.up_name }}</view>
           <view>
@@ -18,18 +13,9 @@
       </view>
       <!--  color="#fff" -->
       <view>
-        <up-button
-          icon="share"
-          color="#666"
-          size="small"
-          type="primary"
-          style="width: 140rpx"
-          plain
-          @click="shareFn"
-          open-type="share"
-        >
-          分享</up-button
-        >
+        <up-button icon="share" color="#666" size="small" type="primary" style="width: 140rpx" plain @click="shareFn"
+          open-type="share">
+          分享</up-button>
         <!-- <button
           class="u-button u-reset-button u-button--square u-button--small u-button--plain"
           open-type="share"
@@ -48,32 +34,19 @@
       /> -->
       <!-- type="warning" -->
     </view>
-    <view class="img_box">
-      <up-image
-        :show-loading="true"
-        :src="videoObj.videoImg"
-        width="100%"
-        height="320rpx"
-        radius="5rpx"
-      ></up-image>
+    <view class="img_box" :enable-flex="true">
+      <up-image :show-loading="true" :src="videoObj.videoImg" width="100%" height="320rpx" radius="5rpx"></up-image>
       <!-- <view > -->
       <!-- bof.png -->
-      <up-image
-        :src="BfImg"
-        class="btn"
-        width="80rpx"
-        height="80rpx"
-      ></up-image>
+      <view class="btton">
+        <up-image :src="BfImg"   width="80rpx" height="80rpx"></up-image>
+      </view>
+
       <!-- <up-icon class="btn" size="50" name="play-circle"></up-icon> -->
       <!-- </view> -->
     </view>
     <up-sticky bgColor="#fff">
-      <up-tabs
-        lineWidth="30"
-        :list="list1"
-        class="marginT10"
-        @click="tabClick"
-      ></up-tabs>
+      <up-tabs lineWidth="30" :list="list1" class="marginT10" @click="tabClick"></up-tabs>
     </up-sticky>
     <view v-show="active == 0">
       <view class="dp_box" v-for="(item, index) in shopList" :key="index">
@@ -88,46 +61,24 @@
             <view class="marginL20 marginR20">
               <view class="f16 c333 lh24">{{ item.name }}</view>
               <view class="f14 c999 lh20">
-                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view
-              >
+                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view>
               <view class="f14 c999 lh20 des"> {{ item.address }} </view>
             </view>
           </view>
           <view>
-            <up-button
-              type="primary"
-              shape="circle"
-              color="#ED7043"
-              v-if="item.shopUuid"
-            >
+            <up-button type="primary" shape="circle" color="#ED7043" v-if="item.shopUuid">
               大众点评
-            </up-button></view
-          >
+            </up-button>
+          </view>
         </view>
         <view class="flexBetween">
           <view style="width: 240rpx">
-            <up-button
-              type="primary"
-              icon="star"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-if="isCollection"
-              @click="addCollection()"
-            >
+            <up-button type="primary" icon="star" style="width: 240rpx" plain color="#666" size="small"
+              v-if="isCollection" @click="addCollection()">
               收藏
             </up-button>
-            <up-button
-              type="primary"
-              icon="star-fill"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-if="!isCollection"
-              @click="addCollection()"
-            >
+            <up-button type="primary" icon="star-fill" style="width: 240rpx" plain color="#666" size="small"
+              v-if="!isCollection" @click="addCollection()">
               取消收藏
             </up-button>
             <!-- <up-tag
@@ -145,33 +96,14 @@
             icon="star-fill"
           ></up-tag> -->
           </view>
-          <view
-            ><up-button
-              v-if="item.latitude && item.longitude"
-              type="primary"
-              icon="map"
-              style="width: 240rpx"
-              plain
-              size="small"
-              color="#666"
-            >
+          <view><up-button v-if="item.latitude && item.longitude" type="primary" icon="map" style="width: 240rpx" plain
+              size="small" color="#666">
               导航
-            </up-button></view
-          >
-          <view
-            ><up-button
-              v-if="item.tel"
-              type="primary"
-              icon="phone"
-              style="width: 180rpx"
-              plain
-              size="small"
-              color="#666"
-              @click="callPhone(item.tel)"
-            >
+            </up-button></view>
+          <view><up-button v-if="item.tel" type="primary" icon="phone" style="width: 180rpx" plain size="small"
+              color="#666" @click="callPhone(item.tel)">
               电话
-            </up-button></view
-          >
+            </up-button></view>
         </view>
       </view>
     </view>
@@ -268,7 +200,7 @@ let lower = (e) => {
 };
 
 // share
-let shareFn = () => {};
+let shareFn = () => { };
 
 // 电话
 let callPhone = (phoneStr) => {
@@ -360,29 +292,41 @@ let addCollection = async () => {
   padding: 0 10rpx;
   background-color: #f6f6f6;
 }
+
 .up_box {
   padding: 30rpx 0;
+
   .up {
     margin: 0 20rpx;
+
     .btn text {
       color: #fff;
     }
   }
 }
+
 .img_box {
   position: relative;
-  .btn {
-    position: absolute;
-    top: calc(50% - 25rpx);
-    left: calc(50% - 25rpx);
-  }
+  display: inline-block;
+  width: 100%;
+
 }
+
+.img_box .btton {
+  position: absolute;
+  top: calc(50% - 25rpx);
+  left: calc(50% - 25rpx);
+  // border: 1px solid red;
+  z-index: 99;
+}
+
 .dp_box {
   margin-top: 20rpx;
   padding: 10rpx;
   background: #fff;
   border-radius: 10rpx;
   box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+
   .des {
     overflow: hidden;
     -webkit-line-clamp: 2;

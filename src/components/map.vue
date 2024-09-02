@@ -6,17 +6,10 @@
       <text>纬度: {{ location.latitude }}</text>
     </view>
     <!-- 显示地图 -->
-    <map
-      longitude="{{ location.longitude }}"
-      latitude="{{ location.latitude }}"
-      scale="14"
-      style="width: 100%; height: 500px"
-    >
+    <map longitude="{{ location.longitude }}" latitude="{{ location.latitude }}" scale="14"
+      style="width: 100%; height: 500px">
       <cover-view>
-        <cover-image
-          src="https://example.com/marker.png"
-          style="width: 30px; height: 30px"
-        ></cover-image>
+        <cover-image src="https://example.com/marker.png" style="width: 30px; height: 30px"></cover-image>
       </cover-view>
     </map>
   </view>
@@ -32,6 +25,7 @@ import {
   nextTick,
   computed,
 } from "vue";
+import { getLocation } from "@/utils/customFn.js"
 
 let props = defineProps({
   data: {
@@ -67,36 +61,31 @@ let toMap = () => {
   });
 };
 //获取位置授权
-let goMap = () => {
+let goMap = async () => {
   // uniapp 需要先调取用户授权请求询问用户是否授权
-  uni.getLocation({
-        type: 'wgs84',
-        success: (res) => {
-          console.log('定位成功', res);
-        //   location = res; // 保存定位信息
-        },
-        fail: (err) => {
-          console.error('定位失败', err);
-        },
-      });
-//   uni.authorize({
-//     scope: "scope.userLocation",
-//     success(res) {
-//       uni.getLocation({
-//         type: "wgs84",
-//         success: (res) => {
-//           console.log(res);
-//           console.log("纬度：" + res.latitude);
-//           console.log("经度：" + res.longitude);
-//           location.latitude = res.latitude;
-//           location.longitude = res.longitude;
-//         },
-//       });
-//     },
-//     fail(err) {
-//       uni.$showMsg("获取位置失败！");
-//     },
-//   });
+  // let position = await getLocation()
+  // console.log(position)
+
+
+
+  //   uni.authorize({
+  //     scope: "scope.userLocation",
+  //     success(res) {
+  //       uni.getLocation({
+  //         type: "wgs84",
+  //         success: (res) => {
+  //           console.log(res);
+  //           console.log("纬度：" + res.latitude);
+  //           console.log("经度：" + res.longitude);
+  //           location.latitude = res.latitude;
+  //           location.longitude = res.longitude;
+  //         },
+  //       });
+  //     },
+  //     fail(err) {
+  //       uni.$showMsg("获取位置失败！");
+  //     },
+  //   });
 };
 
 let tan = (val) => {
@@ -159,6 +148,7 @@ let toDetail = () => {
 
     .bottom_box {
       margin-top: 30rpx;
+
       view {
         width: 50%;
         font-size: 20rpx;

@@ -329,3 +329,23 @@ export const filterNum = (json) => {
   }
   return item;
 };
+
+// 获取定位信息
+export function getLocation() {
+	return new Promise((resolve, reject) => {
+		uni.getLocation({
+			type: 'gcj02',
+			// type: 'wgs84',
+			geocode: true,
+			accuracy: 'best',
+			isHighAccuracy: true,
+			success: (res) => {
+				resolve(res)
+			},
+			fail: (err) => {
+				reject(err)
+			},
+			complete: (res) => {}
+		})
+	})
+}
