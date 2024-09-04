@@ -1,16 +1,8 @@
 <template>
   <view>
-    <!-- 显示定位信息 -->
-    <view v-if="location">
-      <text>经度: {{ location.longitude }}</text>
-      <text>纬度: {{ location.latitude }}</text>
-    </view>
     <!-- 显示地图 -->
-    <map longitude="{{ location.longitude }}" latitude="{{ location.latitude }}" scale="14"
-      style="width: 100%; height: 500px">
-      <cover-view>
-        <cover-image src="https://example.com/marker.png" style="width: 30px; height: 30px"></cover-image>
-      </cover-view>
+    <map id="test_map" ref="map1" :show-location="true" :longitude="location.longitude" :latitude="location.latitude"
+      :scale="scale" style="width: 100%; height: 500px">
     </map>
   </view>
 </template>
@@ -37,9 +29,9 @@ let props = defineProps({
 });
 let item = computed(() => props.data);
 let location = reactive({
-  latitude: 0,
-  longitude: 0,
-  scale: 6,
+  latitude: 31.207867,
+  longitude: 121.488601,
+  scale: 14,
   address: "",
   marker: [],
 });

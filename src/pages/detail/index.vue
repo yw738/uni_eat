@@ -34,12 +34,12 @@
       /> -->
       <!-- type="warning" -->
     </view>
-    <view class="img_box" :enable-flex="true">
+    <view class="img_box" :enable-flex="true" @click="openBili">
       <up-image :show-loading="true" :src="videoObj.videoImg" width="100%" height="320rpx" radius="5rpx"></up-image>
       <!-- <view > -->
       <!-- bof.png -->
       <view class="btton">
-        <up-image :src="BfImg"   width="80rpx" height="80rpx"></up-image>
+        <image src="@/static/play.svg" style="width:100rpx;height:100rpx;" />
       </view>
 
       <!-- <up-icon class="btn" size="50" name="play-circle"></up-icon> -->
@@ -66,7 +66,7 @@
             </view>
           </view>
           <view>
-            <up-button type="primary" shape="circle" color="#ED7043" v-if="item.shopUuid">
+            <up-button type="primary" shape="circle" color="#ED7043" @click="openDP(item.shopUuid)" v-if="item.shopUuid">
               大众点评
             </up-button>
           </view>
@@ -100,10 +100,13 @@
               size="small" color="#666">
               导航
             </up-button></view>
-          <view><up-button v-if="item.tel" type="primary" icon="phone" style="width: 180rpx" plain size="small"
-              color="#666" @click="callPhone(item.tel)">
+          <view>
+            <up-button v-if="item.tel && item.tel != '暂无'" type="primary" icon="phone" style="width: 180rpx" plain
+              size="small" color="#666" @click="callPhone(item.tel)">
               电话
-            </up-button></view>
+            </up-button>
+            <view v-else style="width:120rpx;"></view>
+          </view>
         </view>
       </view>
     </view>
@@ -125,7 +128,7 @@ import {
 } from "@dcloudio/uni-app";
 import MapCom from "@/components/map.vue";
 import { eatApi } from "@/api/api.js";
-import BfImg from "@/static/bof.png";
+import BfImg from "@/static/play.svg";
 // import useStore from "@/store/index.js";
 // const { app } = userStore();
 // let app2 = app.appIndex;
@@ -145,11 +148,12 @@ let state = reactive({
   ],
 
   tableData: [],
-  pagination: { pageSize: 20, pageIndex: 1, total: 0 },
 
   upObj: {},
   videoObj: {},
   shopList: [],
+
+
 });
 let { scrollTop, active, list1, upObj, videoObj, shopList } = toRefs(state);
 
@@ -190,7 +194,29 @@ let init = (id) => {
     }
   });
 };
-
+// 打开b站
+let openBili = () => {
+  let { videoId } = state.videoObj
+  // 微信小程序执行的方法
+  uni.navigateToMiniProgram({
+    appId: 'wx7564fd5313d24844',
+    path: `pages/video/video?page=0&share_times=2&avid=${videoId}`, // 不填默认首页
+    success(res) {
+      console.log(res)
+    }
+  })
+}
+// 打开大众点评
+let openDP = (shopUuid) => {
+  // 微信小程序执行的方法
+  uni.navigateToMiniProgram({
+    appId: 'wx734c1ad7b3562129',
+    path: `pages/poi/poi?redirect_from=pages%2Fdetail%2Fdetail&shopType=10&shopUuid=${shopUuid}&shopStyle=multipic`, // 不填默认首页
+    success(res) {
+      console.log(res)
+    }
+  })
+}
 let upper = (e) => {
   console.log(e);
 };
@@ -204,9 +230,13 @@ let shareFn = () => { };
 
 // 电话
 let callPhone = (phoneStr) => {
-  let arr = phoneStr.split(",");
+  let str = phoneStr
+  if (phoneStr.includes(",")) {
+    str = phoneStr.split(",")[0];
+  }
+  if (str == '暂无') return;
   uni.makePhoneCall({
-    phoneNumber: arr[0], //仅为示例
+    phoneNumber: str, //仅为示例
   });
 };
 const show = ref(false);
@@ -314,8 +344,8 @@ let addCollection = async () => {
 
 .img_box .btton {
   position: absolute;
-  top: calc(50% - 25rpx);
-  left: calc(50% - 25rpx);
+  top: calc(50% - 50rpx);
+  left: calc(50% - 50rpx);
   // border: 1px solid red;
   z-index: 99;
 }
