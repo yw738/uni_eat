@@ -1,13 +1,8 @@
 <template>
-  <view class="content">
+  <view class="content" enable-flex>
     <view class="up_box marginB20 flexBetween">
       <view class="flexStart">
-        <up-image
-          :src="upObj.up_avatar"
-          width="80rpx"
-          height="80rpx"
-          radius="10rpx"
-        />
+        <up-image :src="upObj.up_avatar" width="80rpx" height="80rpx" radius="10rpx" />
         <view class="up">
           <view class="f16 c333">{{ upObj.up_name }}</view>
           <view>
@@ -18,18 +13,9 @@
       </view>
       <!--  color="#fff" -->
       <view>
-        <up-button
-          icon="share"
-          color="#666"
-          size="small"
-          type="primary"
-          style="width: 140rpx"
-          plain
-          @click="shareFn"
-          open-type="share"
-        >
-          分享</up-button
-        >
+        <up-button icon="share" color="#666" size="small" type="primary" style="width: 140rpx" plain @click="shareFn"
+          open-type="share">
+          分享</up-button>
         <!-- <button
           class="u-button u-reset-button u-button--square u-button--small u-button--plain"
           open-type="share"
@@ -48,32 +34,19 @@
       /> -->
       <!-- type="warning" -->
     </view>
-    <view class="img_box">
-      <up-image
-        :show-loading="true"
-        :src="videoObj.videoImg"
-        width="100%"
-        height="320rpx"
-        radius="5rpx"
-      ></up-image>
+    <view class="img_box" :enable-flex="true" @click="openBili">
+      <up-image :show-loading="true" :src="videoObj.videoImg" width="100%" height="320rpx" radius="5rpx"></up-image>
       <!-- <view > -->
       <!-- bof.png -->
-      <up-image
-        :src="BfImg"
-        class="btn"
-        width="80rpx"
-        height="80rpx"
-      ></up-image>
+      <view class="btton">
+        <image src="@/static/play.svg" style="width:100rpx;height:100rpx;" />
+      </view>
+
       <!-- <up-icon class="btn" size="50" name="play-circle"></up-icon> -->
       <!-- </view> -->
     </view>
     <up-sticky bgColor="#fff">
-      <up-tabs
-        lineWidth="30"
-        :list="list1"
-        class="marginT10"
-        @click="tabClick"
-      ></up-tabs>
+      <up-tabs lineWidth="30" :list="list1" class="marginT10" @click="tabClick"></up-tabs>
     </up-sticky>
     <view v-show="active == 0">
       <view class="dp_box" v-for="(item, index) in shopList" :key="index">
@@ -88,46 +61,24 @@
             <view class="marginL20 marginR20">
               <view class="f16 c333 lh24">{{ item.name }}</view>
               <view class="f14 c999 lh20">
-                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view
-              >
+                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view>
               <view class="f14 c999 lh20 des"> {{ item.address }} </view>
             </view>
           </view>
           <view>
-            <up-button
-              type="primary"
-              shape="circle"
-              color="#ED7043"
-              v-if="item.shopUuid"
-            >
+            <up-button type="primary" shape="circle" color="#ED7043" @click="openDP(item.shopUuid)" v-if="item.shopUuid">
               大众点评
-            </up-button></view
-          >
+            </up-button>
+          </view>
         </view>
         <view class="flexBetween">
           <view style="width: 240rpx">
-            <up-button
-              type="primary"
-              icon="star"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-if="isCollection"
-              @click="addCollection()"
-            >
+            <up-button type="primary" icon="star" style="width: 240rpx" plain color="#666" size="small"
+              v-if="isCollection" @click="addCollection()">
               收藏
             </up-button>
-            <up-button
-              type="primary"
-              icon="star-fill"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-if="!isCollection"
-              @click="addCollection()"
-            >
+            <up-button type="primary" icon="star-fill" style="width: 240rpx" plain color="#666" size="small"
+              v-if="!isCollection" @click="addCollection()">
               取消收藏
             </up-button>
             <!-- <up-tag
@@ -145,33 +96,17 @@
             icon="star-fill"
           ></up-tag> -->
           </view>
-          <view
-            ><up-button
-              v-if="item.latitude && item.longitude"
-              type="primary"
-              icon="map"
-              style="width: 240rpx"
-              plain
-              size="small"
-              color="#666"
-            >
+          <view><up-button v-if="item.latitude && item.longitude" type="primary" icon="map" style="width: 240rpx" plain
+              size="small" color="#666">
               导航
-            </up-button></view
-          >
-          <view
-            ><up-button
-              v-if="item.tel"
-              type="primary"
-              icon="phone"
-              style="width: 180rpx"
-              plain
-              size="small"
-              color="#666"
-              @click="callPhone(item.tel)"
-            >
+            </up-button></view>
+          <view>
+            <up-button v-if="item.tel && item.tel != '暂无'" type="primary" icon="phone" style="width: 180rpx" plain
+              size="small" color="#666" @click="callPhone(item.tel)">
               电话
-            </up-button></view
-          >
+            </up-button>
+            <view v-else style="width:120rpx;"></view>
+          </view>
         </view>
       </view>
     </view>
@@ -193,7 +128,7 @@ import {
 } from "@dcloudio/uni-app";
 import MapCom from "@/components/map.vue";
 import { eatApi } from "@/api/api.js";
-import BfImg from "@/static/bof.png";
+import BfImg from "@/static/play.svg";
 // import useStore from "@/store/index.js";
 // const { app } = userStore();
 // let app2 = app.appIndex;
@@ -213,11 +148,12 @@ let state = reactive({
   ],
 
   tableData: [],
-  pagination: { pageSize: 20, pageIndex: 1, total: 0 },
 
   upObj: {},
   videoObj: {},
   shopList: [],
+
+
 });
 let { scrollTop, active, list1, upObj, videoObj, shopList } = toRefs(state);
 
@@ -258,7 +194,29 @@ let init = (id) => {
     }
   });
 };
-
+// 打开b站
+let openBili = () => {
+  let { videoId } = state.videoObj
+  // 微信小程序执行的方法
+  uni.navigateToMiniProgram({
+    appId: 'wx7564fd5313d24844',
+    path: `pages/video/video?page=0&share_times=2&avid=${videoId}`, // 不填默认首页
+    success(res) {
+      console.log(res)
+    }
+  })
+}
+// 打开大众点评
+let openDP = (shopUuid) => {
+  // 微信小程序执行的方法
+  uni.navigateToMiniProgram({
+    appId: 'wx734c1ad7b3562129',
+    path: `pages/poi/poi?redirect_from=pages%2Fdetail%2Fdetail&shopType=10&shopUuid=${shopUuid}&shopStyle=multipic`, // 不填默认首页
+    success(res) {
+      console.log(res)
+    }
+  })
+}
 let upper = (e) => {
   console.log(e);
 };
@@ -267,14 +225,18 @@ let lower = (e) => {
   console.log(e);
 };
 
-// share 
-let shareFn = () => {};
+// share
+let shareFn = () => { };
 
 // 电话 ok
 let callPhone = (phoneStr) => {
-  let arr = phoneStr.split(",");
+  let str = phoneStr
+  if (phoneStr.includes(",")) {
+    str = phoneStr.split(",")[0];
+  }
+  if (str == '暂无') return;
   uni.makePhoneCall({
-    phoneNumber: arr[0], //仅为示例
+    phoneNumber: str, //仅为示例
   });
 };
 const show = ref(false);
@@ -360,29 +322,41 @@ let addCollection = async () => {
   padding: 0 10rpx;
   background-color: #f6f6f6;
 }
+
 .up_box {
   padding: 30rpx 0;
+
   .up {
     margin: 0 20rpx;
+
     .btn text {
       color: #fff;
     }
   }
 }
+
 .img_box {
   position: relative;
-  .btn {
-    position: absolute;
-    top: calc(50% - 25rpx);
-    left: calc(50% - 25rpx);
-  }
+  display: inline-block;
+  width: 100%;
+
 }
+
+.img_box .btton {
+  position: absolute;
+  top: calc(50% - 50rpx);
+  left: calc(50% - 50rpx);
+  // border: 1px solid red;
+  z-index: 99;
+}
+
 .dp_box {
   margin-top: 20rpx;
   padding: 10rpx;
   background: #fff;
   border-radius: 10rpx;
   box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+
   .des {
     overflow: hidden;
     -webkit-line-clamp: 2;
