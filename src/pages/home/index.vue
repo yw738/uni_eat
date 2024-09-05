@@ -55,7 +55,7 @@
 import { onMounted, reactive, ref, toRefs, defineEmits, nextTick } from "vue";
 import { onLoad, onShow, onHide, onPageScroll } from "@dcloudio/uni-app";
 import Card from "@/components/card.vue";
-
+import pcaCode from "@/static/js/pc.js";
 import { eatApi } from "@/api/api.js";
 // import useStore from "@/store/index.js";
 // const { app } = userStore();
