@@ -26,8 +26,10 @@
 import { onMounted, reactive, ref, toRefs, defineEmits, nextTick } from "vue";
 import { onLoad, onShow, onHide, onPageScroll } from "@dcloudio/uni-app";
 import Card from "@/components/card.vue";
-
 import { eatApi } from "@/api/api.js";
+//获取应用实例
+const app = getApp();
+
 // import useStore from "@/store/index.js";
 // const { app } = userStore();
 // let app2 = app.appIndex;
@@ -38,8 +40,7 @@ let state = reactive({
   indexList: [{ title: 1, content: "4444444444" }, {}], //{}, {}
 
   searchData: {
-    upId: "",
-    city: "",
+    userId: "96110",
   },
   tableData: [],
   pagination: { pageSize: 20, pageIndex: 1, total: 0 },
@@ -52,19 +53,44 @@ onShow(() => {
 let handClick = (item) => {
   console.log("item", item);
 };
-
 let getList = () => {
-  let params = JSON.parse(JSON.stringify(state.searchData));
-  // Object.assign(params, {});
-  params.pageIndex = state.pagination.pageIndex;
-  params.pageSize = state.pagination.pageSize;
-  eatApi.getList(params).then((res) => {
-    if (!state.tableData.length) {
-      state.tableData = res.data;
-    } else {
-      state.tableData.push(res.data);
-    }
+  uni.showLoading({
+    title: "加载中",
+    mask: true,
   });
+  let params = { userId: app.globalData.openId };
+  eatApi
+    .getAllCollection(params)
+    .then((res) => {
+      state.tableData = res.data;
+      // app.globalData.collectionList = res.data;
+      uni.hideLoading();
+    })
+    .catch(() => uni.hideLoading());
+};
+let onClick = (e, item) => {
+  //点击选项按钮时触发事件
+  //e = {content,index} ，content（点击内容）、index（下标）、position (位置信息)
+  uni.showModal({
+    title: "提示",
+    content: "确定取消收藏吗？",
+    // confirmColor: "#FF7E05",
+    success: (res) => {
+      if (res.confirm) {
+        console.log("用户点击确定");
+        del(item);
+      } else if (res.cancel) {
+        console.log("用户点击取消");
+      }
+    },
+  });
+};
+let del = (item) => {
+  eatApi
+    .delCollection({
+      id: item.id,
+    })
+    .then(() => getList());
 };
 
 let upper = (e) => {
@@ -75,30 +101,6 @@ let lower = (e) => {
   console.log(e);
 };
 let scroll = (e) => {};
-
-const show = ref(false);
-const columns = reactive([
-  ["中国", "美国"],
-  ["深圳", "厦门", "上海", "拉萨"],
-]);
-const columnData = reactive([
-  ["深圳", "厦门", "上海", "拉萨"],
-  ["得州", "华盛顿", "纽约", "阿拉斯加"],
-]);
-
-const uPickerRef = ref(null);
-const changeHandler = (e) => {
-  const { columnIndex, value, values, index } = e;
-
-  if (columnIndex === 0) {
-    uPickerRef.value.setColumnValues(1, columnData[index]);
-  }
-};
-
-const confirm = (e) => {
-  console.log("confirm", e);
-  show.value = false;
-};
 </script>
 
 <style lang="scss" scoped>

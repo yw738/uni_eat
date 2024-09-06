@@ -1,13 +1,60 @@
 <script>
+import { eatApi } from "@/api/api.js";
+
 export default {
+  globalData: {
+    userInfo: null,
+    openId: "", //当前登录人的唯一id
+    collectionList: [],
+
+    statusBarHeight: 0, // 状态导航栏高度
+    navHeight: 0, // 总体高度
+    navigationBarHeight: 0, // 导航栏高度(标题栏高度)
+  },
   onLaunch: function () {
-    console.log("App Launch");
+    // 状态栏高度
+    this.globalData.statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
+    // #ifdef MP-WEIXIN
+    // 获取微信胶囊的位置信息 width,height,top,right,left,bottom
+    const custom = wx?.getMenuButtonBoundingClientRect() || {};
+    // console.log(custom)
+
+    // 导航栏高度(标题栏高度) = 胶囊高度 + (顶部距离 - 状态栏高度) * 2
+    this.globalData.navigationBarHeight =
+      custom.height + (custom.top - this.globalData.statusBarHeight) * 2;
+    console.log("导航栏高度：" + this.globalData.navigationBarHeight);
+
+    // 总体高度 = 状态栏高度 + 导航栏高度
+    this.globalData.navHeight =
+      this.globalData.navigationBarHeight + this.globalData.statusBarHeight;
+    // #endif
+    // #ifdef H5
+    this.$options.globalData.navHeight = 45;
+    // #endif
+
+    // 获取 小程序用户唯一id
+    const openId = uni.getStorageSync("openId");
+    if (openId) {
+      this.$options.globalData.openId = openId;
+    } else {
+      uni.login({
+        provider: "weixin", //如果是uniapp，在这里需要标明平台的类型，支持的参数请查阅uniapp官网的uni.login()文档
+        success: (res) => {
+          eatApi.getOpenId({ code: res.code }).then((cts) => {
+            let { openid } = cts;
+            this.$options.globalData.openId = openid;
+            uni.setStorageSync("openId", openid);
+          });
+        },
+        fail: (err) => console.log(err), //登陆失败的回调
+      });
+    }
   },
   onShow: function () {
-    console.log("App Show");
+    // console.log("App Show");
   },
   onHide: function () {
-    console.log("App Hide");
+    // console.log("App Hide");
   },
 };
 </script>

@@ -2,7 +2,12 @@
   <view class="content" enable-flex>
     <view class="up_box marginB20 flexBetween">
       <view class="flexStart">
-        <up-image :src="upObj.up_avatar" width="80rpx" height="80rpx" radius="10rpx" />
+        <up-image
+          :src="upObj.up_avatar"
+          width="80rpx"
+          height="80rpx"
+          radius="10rpx"
+        />
         <view class="up">
           <view class="f16 c333">{{ upObj.up_name }}</view>
           <view>
@@ -13,9 +18,18 @@
       </view>
       <!--  color="#fff" -->
       <view>
-        <up-button icon="share" color="#666" size="small" type="primary" style="width: 140rpx" plain @click="shareFn"
-          open-type="share">
-          分享</up-button>
+        <up-button
+          icon="share"
+          color="#666"
+          size="small"
+          type="primary"
+          style="width: 140rpx"
+          plain
+          @click="shareFn"
+          open-type="share"
+        >
+          分享</up-button
+        >
         <!-- <button
           class="u-button u-reset-button u-button--square u-button--small u-button--plain"
           open-type="share"
@@ -35,18 +49,29 @@
       <!-- type="warning" -->
     </view>
     <view class="img_box" :enable-flex="true" @click="openBili">
-      <up-image :show-loading="true" :src="videoObj.videoImg" width="100%" height="320rpx" radius="5rpx"></up-image>
+      <up-image
+        :show-loading="true"
+        :src="videoObj.videoImg"
+        width="100%"
+        height="320rpx"
+        radius="5rpx"
+      ></up-image>
       <!-- <view > -->
       <!-- bof.png -->
       <view class="btton">
-        <image src="@/static/play.svg" style="width:100rpx;height:100rpx;" />
+        <image src="@/static/play.svg" style="width: 100rpx; height: 100rpx" />
       </view>
 
       <!-- <up-icon class="btn" size="50" name="play-circle"></up-icon> -->
       <!-- </view> -->
     </view>
     <up-sticky bgColor="#fff">
-      <up-tabs lineWidth="30" :list="list1" class="marginT10" @click="tabClick"></up-tabs>
+      <up-tabs
+        lineWidth="30"
+        :list="list1"
+        class="marginT10"
+        @click="tabClick"
+      ></up-tabs>
     </up-sticky>
     <view v-show="active == 0">
       <view class="dp_box" v-for="(item, index) in shopList" :key="index">
@@ -61,51 +86,77 @@
             <view class="marginL20 marginR20">
               <view class="f16 c333 lh24">{{ item.name }}</view>
               <view class="f14 c999 lh20">
-                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view>
+                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view
+              >
               <view class="f14 c999 lh20 des"> {{ item.address }} </view>
             </view>
           </view>
           <view>
-            <up-button type="primary" shape="circle" color="#ED7043" @click="openDP(item.shopUuid)" v-if="item.shopUuid">
+            <up-button
+              type="primary"
+              shape="circle"
+              color="#ED7043"
+              @click="openDP(item.shopUuid)"
+              v-if="item.shopUuid"
+            >
               大众点评
             </up-button>
           </view>
         </view>
         <view class="flexBetween">
           <view style="width: 240rpx">
-            <up-button type="primary" icon="star" style="width: 240rpx" plain color="#666" size="small"
-              v-if="isCollection" @click="addCollection()">
-              收藏
-            </up-button>
-            <up-button type="primary" icon="star-fill" style="width: 240rpx" plain color="#666" size="small"
-              v-if="!isCollection" @click="addCollection()">
+            <up-button
+              type="primary"
+              icon="star-fill"
+              style="width: 240rpx"
+              plain
+              color="#666"
+              size="small"
+              v-if="collectionData[item.shopId]"
+              @click="addCollection(false, item.shopId)"
+            >
               取消收藏
             </up-button>
-            <!-- <up-tag
-            text="收藏"
-            @click="addCollection()"
-            v-if="isCollection"
-            plain
-            size="large"
-            icon="star"
-          ></up-tag>
-          <up-tag
-            text="收藏"
-            @click="addCollection()"
-            v-else
-            icon="star-fill"
-          ></up-tag> -->
+            <up-button
+              type="primary"
+              icon="star"
+              style="width: 240rpx"
+              plain
+              color="#666"
+              size="small"
+              v-else
+              @click="addCollection(true, item.shopId, index)"
+            >
+              收藏
+            </up-button>
           </view>
-          <view><up-button v-if="item.latitude && item.longitude" type="primary" icon="map" style="width: 240rpx" plain
-              size="small" color="#666">
+          <view
+            ><up-button
+              v-if="item.latitude && item.longitude"
+              type="primary"
+              icon="map"
+              style="width: 240rpx"
+              plain
+              size="small"
+              color="#666"
+            >
               导航
-            </up-button></view>
+            </up-button></view
+          >
           <view>
-            <up-button v-if="item.tel && item.tel != '暂无'" type="primary" icon="phone" style="width: 180rpx" plain
-              size="small" color="#666" @click="callPhone(item.tel)">
+            <up-button
+              v-if="item.tel && item.tel != '暂无'"
+              type="primary"
+              icon="phone"
+              style="width: 180rpx"
+              plain
+              size="small"
+              color="#666"
+              @click="callPhone(item.tel)"
+            >
               电话
             </up-button>
-            <view v-else style="width:120rpx;"></view>
+            <view v-else style="width: 120rpx"></view>
           </view>
         </view>
       </view>
@@ -129,10 +180,8 @@ import {
 import MapCom from "@/components/map.vue";
 import { eatApi } from "@/api/api.js";
 import BfImg from "@/static/play.svg";
-// import useStore from "@/store/index.js";
-// const { app } = userStore();
-// let app2 = app.appIndex;
-// console.log(useStore);
+//获取应用实例
+const app = getApp();
 
 let isCollection = ref(false);
 let state = reactive({
@@ -153,9 +202,10 @@ let state = reactive({
   videoObj: {},
   shopList: [],
 
-
+  collectionData: {},
 });
-let { scrollTop, active, list1, upObj, videoObj, shopList } = toRefs(state);
+let { collectionData, active, list1, upObj, videoObj, shopList } =
+  toRefs(state);
 
 onLoad((options) => {
   // 页面初始化 options为页面跳转所带来的参数
@@ -185,38 +235,48 @@ let handClick = (item) => {
   console.log("item", item);
 };
 
-let init = (id) => {
-  eatApi.getDetail({ id: id }).then((res) => {
+let init = async (id) => {
+  await eatApi.getDetail({ id: id }).then((res) => {
     if (res.code == 0) {
       state.upObj = res.data.upDto;
       state.videoObj = res.data;
       state.shopList = res.data.shopList;
     }
   });
+  let userId = app.globalData.openId;
+  let videoId = state.videoObj.videoId;
+  eatApi.isCollection({ userId, videoId }).then((res) => {
+    if (res.code == 0) {
+      state.collectionData = res.data;
+    }
+  });
 };
+
+// let getCollection
+
 // 打开b站
 let openBili = () => {
-  let { videoId } = state.videoObj
+  let { videoId } = state.videoObj;
   // 微信小程序执行的方法
   uni.navigateToMiniProgram({
-    appId: 'wx7564fd5313d24844',
+    appId: "wx7564fd5313d24844",
     path: `pages/video/video?page=0&share_times=2&avid=${videoId}`, // 不填默认首页
     success(res) {
-      console.log(res)
-    }
-  })
-}
+      console.log(res);
+    },
+  });
+};
 // 打开大众点评
 let openDP = (shopUuid) => {
   // 微信小程序执行的方法
   uni.navigateToMiniProgram({
-    appId: 'wx734c1ad7b3562129',
+    appId: "wx734c1ad7b3562129",
     path: `pages/poi/poi?redirect_from=pages%2Fdetail%2Fdetail&shopType=10&shopUuid=${shopUuid}&shopStyle=multipic`, // 不填默认首页
     success(res) {
-      console.log(res)
-    }
-  })
-}
+      console.log(res);
+    },
+  });
+};
 let upper = (e) => {
   console.log(e);
 };
@@ -226,15 +286,15 @@ let lower = (e) => {
 };
 
 // share
-let shareFn = () => { };
+let shareFn = () => {};
 
 // 电话 ok
 let callPhone = (phoneStr) => {
-  let str = phoneStr
+  let str = phoneStr;
   if (phoneStr.includes(",")) {
     str = phoneStr.split(",")[0];
   }
-  if (str == '暂无') return;
+  if (str == "暂无") return;
   uni.makePhoneCall({
     phoneNumber: str, //仅为示例
   });
@@ -252,66 +312,69 @@ function tabClick(item) {
   state.active = item.index;
   console.log("item", item.name, state.active);
 }
+
+let isLoading = ref(false);
+
 /**
  * 添加||取消收藏 0.8s的请求cd
+ * @param {boolean} bool true 为新增收藏， false 为取消收藏
+ * @param {string} shopId 店铺id
+ * @param {number} num 店铺 在当前视频的位置 || 下标
  */
-let addCollection = async () => {
-  isCollection.value = !isCollection.value;
-  // return;
-  // let { id, isCollection } = this;
-  // let { openId } = app.globalData;
-  // if (this.isLoading) {
-  //   uni.showToast({
-  //     title: "请不要频繁点击！",
-  //     icon: "none",
-  //   });
-  //   return;
-  // }
-  // this.isLoading = true;
-  // setTimeout(() => {
-  //   this.isLoading = false;
-  // }, 800);
-  // try {
-  //   /**
-  //    * true 为已收藏， false 为未收藏
-  //    */
-  //   if (isCollection) {
-  //     await userApi
-  //       .delCollection({
-  //         id: this.params.collectionId,
-  //       })
-  //       .then((res) => {
-  //         if (res.code == 0) {
-  //           this.isCollection = false;
-  //           uni.showToast({
-  //             title: "取消成功",
-  //             icon: "none",
-  //           });
-  //         }
-  //       });
-  //   } else {
-  //     await userApi
-  //       .addCollection({
-  //         itemId: id,
-  //         userId: openId,
-  //       })
-  //       .then((res) => {
-  //         if (res.code == 0) {
-  //           this.isCollection = true;
-  //           this.params.collectionId = res.data.id;
-  //           uni.showToast({
-  //             title: "收藏成功",
-  //             icon: "none",
-  //           });
-  //         }
-  //       });
-  //   }
-  // } catch (err) {
-  //   uni.showToast({
-  //     title: "系统异常",
-  //     icon: "none",
-  //   });
-  // }
+let addCollection = async (bool, shopId, num = 0) => {
+  if (isLoading.value) {
+    uni.showToast({
+      title: "请不要频繁点击！",
+      icon: "none",
+    });
+    return;
+  }
+  isLoading.value = true;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
+
+  try {
+    if (bool) {
+      let userId = app.globalData.openId;
+      let videoId = state.videoObj.videoId;
+      let json = {
+        userId,
+        videoId,
+        num,
+        shopId,
+      };
+      await eatApi.addCollection(json).then((res) => {
+        if (res.code == 0) {
+          state.collectionData[shopId] = res.data.id;
+          uni.showToast({
+            title: "收藏成功",
+            icon: "none",
+          });
+        }
+      });
+    } else {
+      let id = state.collectionData[shopId];
+      await eatApi
+        .delCollection({
+          id: id,
+        })
+        .then((res) => {
+          if (res.code == 0) {
+            delete state.collectionData[shopId];
+            uni.showToast({
+              title: "取消成功",
+              icon: "none",
+            });
+          }
+        });
+    }
+  } catch (err) {
+    uni.showToast({
+      title: "系统异常",
+      icon: "none",
+    });
+  }
 };
 </script>
 
@@ -339,7 +402,6 @@ let addCollection = async () => {
   position: relative;
   display: inline-block;
   width: 100%;
-
 }
 
 .img_box .btton {

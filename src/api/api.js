@@ -14,4 +14,5 @@ export const eatApi = {
   getAllCollection: (data) => get("/api/getAllCollection", data), //)
   addCollection: (data) => get("/api/addCollection", data), //)
   delCollection: (data) => get("/api/delCollection", data), //)
+  isCollection: (data) => get("/api/isCollection", data), //)
 };
