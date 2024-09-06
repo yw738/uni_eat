@@ -1,8 +1,17 @@
 <template>
   <view>
     <!-- 显示地图 -->
-    <map id="test_map" ref="map1" :show-location="true" :longitude="location.longitude" :latitude="location.latitude"
-      :scale="scale" style="width: 100%; height: 500px">
+    <map
+      id="myMap"
+      ref="map1"
+      :longitude="location.longitude"
+      :latitude="location.latitude"
+      :scale="scale"
+      :markers="markers"
+      :show-location="true"
+      @markertap="markertap"
+      style="width: 100%; height: 500px"
+    >
     </map>
   </view>
 </template>
@@ -17,7 +26,7 @@ import {
   nextTick,
   computed,
 } from "vue";
-import { getLocation } from "@/utils/customFn.js"
+import { getLocation } from "@/utils/customFn.js";
 
 let props = defineProps({
   data: {
@@ -33,10 +42,40 @@ let location = reactive({
   longitude: 121.488601,
   scale: 14,
   address: "",
-  marker: [],
 });
-let { latitude, longitude, marker, scale, address } = toRefs(location);
+let { latitude, longitude, scale, address } = toRefs(location);
+const markers = ref([
+  {
+    id: 1, //id必须有一个
+    latitude: 110.299121, //纬度
+    longitude: 25.274215, //经度
+    width: 25, //markers的宽
+    height: 38, //markers的高
+  },
+]);
 
+//使用uni.createMapContext()方法获取地图对象
+const MapContext = uni.createMapContext('myMap')
+//接着调用方法
+//调起app
+const toMapApp = () =>{
+    //openMapApp()方法主要用于拉起地图app选择导航
+	MapContext.openMapApp({
+		//因为不保证经纬度在传输过程中类型是否是number类型，所以使用Number转换
+		latitude: Number(adressLatitude.value),
+		longitude: Number(adressLongitude.value),
+		//destination地址名称
+		destination: adressName.value,
+		success: function(e) {
+			console.log(e)
+			console.log('成功')
+		},
+		fail: function(e) {
+			console.log(e)
+			console.log('失败')
+		}
+	})
+}
 onMounted(() => {
   goMap();
 });
@@ -54,30 +93,7 @@ let toMap = () => {
 };
 //获取位置授权
 let goMap = async () => {
-  // uniapp 需要先调取用户授权请求询问用户是否授权
-  // let position = await getLocation()
-  // console.log(position)
 
-
-
-  //   uni.authorize({
-  //     scope: "scope.userLocation",
-  //     success(res) {
-  //       uni.getLocation({
-  //         type: "wgs84",
-  //         success: (res) => {
-  //           console.log(res);
-  //           console.log("纬度：" + res.latitude);
-  //           console.log("经度：" + res.longitude);
-  //           location.latitude = res.latitude;
-  //           location.longitude = res.longitude;
-  //         },
-  //       });
-  //     },
-  //     fail(err) {
-  //       uni.$showMsg("获取位置失败！");
-  //     },
-  //   });
 };
 
 let tan = (val) => {
