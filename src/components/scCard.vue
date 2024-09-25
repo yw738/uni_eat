@@ -1,15 +1,13 @@
 <template>
   <view class="item" @click="toDetail">
     <view class="box">
-      <!-- <image style="width: 100%; height: 160rpx;" class="img" :src="src"></image> -->
-      <!-- <image style="width: 200px; height: 200px; background-color: #eeeeee;" :mode="item.mode" :src="src"
-                        @error="imageError"></image> -->
       <u--image class="img" width="100%" height="200rpx" :showLoading="true" :src="item.videoImg"></u--image>
       <view class="img_mask flexCen">
         <view class="fw700 txtOverFlow" style="width: 100%">{{
           item.name
         }}</view>
-        <view>距离99公里 {{ item.cityName }} ￥{{ item.avgPrice }} /人</view>
+        <!-- 距离99公里 -->
+        <view> {{ item.cityName }} ￥{{ item.avgPrice }} /人</view>
       </view>
       <view class="txt_box">
         <view class="title">
@@ -25,6 +23,9 @@
 </template>
 
 <script setup>
+/**
+ * 收藏卡片
+*/
 import {
   onMounted,
   reactive,
@@ -63,7 +64,6 @@ let toDetail = () => {
     border-radius: 20rpx 20rpx 12rpx 12rpx;
     position: relative;
     box-shadow: 0rpx 1rpx 22rpx -46rpx rgba(0, 0, 0, 0.04), 0rpx -4rpx 27rpx rgba(0, 0, 0, 0.08);
-
   }
 
   .img_mask {

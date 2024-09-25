@@ -93,7 +93,7 @@ let state = reactive({
     "https://cdn.uviewui.com/uview/swiper/swiper2.png",
     "https://cdn.uviewui.com/uview/swiper/swiper1.png",
   ],
-  indexList: [{ title: 1, content: "4444444444" }, {}], //{}, {}
+  indexList: [], //{}, {}
 
   searchData: {
     upId: "",

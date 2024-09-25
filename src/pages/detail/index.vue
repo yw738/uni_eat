@@ -2,12 +2,7 @@
   <view class="content" enable-flex>
     <view class="up_box marginB20 flexBetween">
       <view class="flexStart">
-        <up-image
-          :src="upObj.up_avatar"
-          width="80rpx"
-          height="80rpx"
-          radius="10rpx"
-        />
+        <up-image :src="upObj.up_avatar" width="80rpx" height="80rpx" radius="10rpx" />
         <view class="up">
           <view class="f16 c333">{{ upObj.up_name }}</view>
           <view>
@@ -18,18 +13,9 @@
       </view>
       <!--  color="#fff" -->
       <view>
-        <up-button
-          icon="share"
-          color="#666"
-          size="small"
-          type="primary"
-          style="width: 140rpx"
-          plain
-          @click="shareFn"
-          open-type="share"
-        >
-          分享</up-button
-        >
+        <up-button icon="share" color="#666" size="small" type="primary" style="width: 140rpx" plain @click="shareFn"
+          open-type="share">
+          分享</up-button>
         <!-- <button
           class="u-button u-reset-button u-button--square u-button--small u-button--plain"
           open-type="share"
@@ -49,13 +35,7 @@
       <!-- type="warning" -->
     </view>
     <view class="img_box" :enable-flex="true" @click="openBili">
-      <up-image
-        :show-loading="true"
-        :src="videoObj.videoImg"
-        width="100%"
-        height="320rpx"
-        radius="5rpx"
-      ></up-image>
+      <up-image :show-loading="true" :src="videoObj.videoImg" width="100%" height="320rpx" radius="5rpx"></up-image>
       <!-- <view > -->
       <!-- bof.png -->
       <view class="btton">
@@ -66,12 +46,7 @@
       <!-- </view> -->
     </view>
     <up-sticky bgColor="#fff">
-      <up-tabs
-        lineWidth="30"
-        :list="list1"
-        class="marginT10"
-        @click="tabClick"
-      ></up-tabs>
+      <up-tabs lineWidth="30" :list="list1" class="marginT10" @click="tabClick"></up-tabs>
     </up-sticky>
     <view v-show="active == 0">
       <view class="dp_box" v-for="(item, index) in shopList" :key="index">
@@ -86,74 +61,34 @@
             <view class="marginL20 marginR20">
               <view class="f16 c333 lh24">{{ item.name }}</view>
               <view class="f14 c999 lh20">
-                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view
-              >
+                ￥{{ item.avgPrice }}/人 {{ item.dpCategory }}</view>
               <view class="f14 c999 lh20 des"> {{ item.address }} </view>
             </view>
           </view>
           <view>
-            <up-button
-              type="primary"
-              shape="circle"
-              color="#ED7043"
-              @click="openDP(item.shopUuid)"
-              v-if="item.shopUuid"
-            >
+            <up-button type="primary" shape="circle" color="#ED7043" @click="openDP(item.shopUuid)" v-if="item.shopUuid">
               大众点评
             </up-button>
           </view>
         </view>
         <view class="flexBetween">
           <view style="width: 240rpx">
-            <up-button
-              type="primary"
-              icon="star-fill"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-if="collectionData[item.id]"
-              @click="addCollection(false, item.id)"
-            >
+            <up-button type="primary" icon="star-fill" style="width: 240rpx" plain color="#666" size="small"
+              v-if="collectionData[item.id]" @click="addCollection(false, item.id)">
               取消收藏
             </up-button>
-            <up-button
-              type="primary"
-              icon="star"
-              style="width: 240rpx"
-              plain
-              color="#666"
-              size="small"
-              v-else
-              @click="addCollection(true, item.id, index)"
-            >
+            <up-button type="primary" icon="star" style="width: 240rpx" plain color="#666" size="small" v-else
+              @click="addCollection(true, item.id, index)">
               收藏
             </up-button>
           </view>
-          <view
-            ><up-button
-              v-if="item.latitude && item.longitude"
-              type="primary"
-              icon="map"
-              style="width: 240rpx"
-              plain
-              size="small"
-              color="#666"
-            >
+          <view><up-button v-if="item.latitude && item.longitude" type="primary" icon="map" style="width: 240rpx" plain
+              size="small" color="#666">
               导航
-            </up-button></view
-          >
+            </up-button></view>
           <view>
-            <up-button
-              v-if="item.tel && item.tel != '暂无'"
-              type="primary"
-              icon="phone"
-              style="width: 180rpx"
-              plain
-              size="small"
-              color="#666"
-              @click="callPhone(item.tel)"
-            >
+            <up-button v-if="item.tel && item.tel != '暂无'" type="primary" icon="phone" style="width: 180rpx" plain
+              size="small" color="#666" @click="callPhone(item.tel)">
               电话
             </up-button>
             <view v-else style="width: 120rpx"></view>
@@ -247,6 +182,13 @@ let init = async (id) => {
   let videoId = state.videoObj.videoId;
   eatApi.isCollection({ userId, videoId }).then((res) => {
     if (res.code == 0) {
+      // 收藏id 集合 
+      /**
+       * {
+       * A店铺id：收藏id A,
+       * B店铺id：收藏id B,
+       * }
+      */
       state.collectionData = res.data;
     }
   });
@@ -286,7 +228,7 @@ let lower = (e) => {
 };
 
 // share
-let shareFn = () => {};
+let shareFn = () => { };
 
 // 电话 ok
 let callPhone = (phoneStr) => {
@@ -339,10 +281,10 @@ let addCollection = async (bool, id, num = 0) => {
       let userId = app.globalData.openId;
       let videoId = state.videoObj.videoId;
       let json = {
-        userId,
-        videoId,
-        num,
-        shopId:id,
+        userId,// 用户id
+        videoId,//视频id
+        num,// 当前店铺 在 当前视频的下标
+        shopId: id,// 店铺id
       };
       await eatApi.addCollection(json).then((res) => {
         if (res.code == 0) {
@@ -354,10 +296,11 @@ let addCollection = async (bool, id, num = 0) => {
         }
       });
     } else {
-      let id = state.collectionData[id];
+      // 店铺id 
+      let shopId = state.collectionData[id];
       await eatApi
         .delCollection({
-          id: id,
+          id: shopId,
         })
         .then((res) => {
           if (res.code == 0) {

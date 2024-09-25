@@ -1,17 +1,11 @@
 <template>
   <view class="content">
     <view>
-      <scroll-view
-        :scroll-top="scrollTop"
-        scroll-y="true"
-        class="scroll-Y"
-        @scrolltoupper="upper"
-        @scrolltolower="lower"
-        @scroll="scroll"
-      >
+      <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
+        @scroll="scroll">
         <view class="list_box">
           <view class="list" v-for="(item, index) in tableData" :key="index">
-            <Card style="width: 100%" :data="item" />
+            <ScCard style="width: 100%" :data="item" />
           </view>
         </view>
       </scroll-view>
@@ -25,7 +19,7 @@
  */
 import { onMounted, reactive, ref, toRefs, defineEmits, nextTick } from "vue";
 import { onLoad, onShow, onHide, onPageScroll } from "@dcloudio/uni-app";
-import Card from "@/components/card.vue";
+import ScCard from "@/components/scCard.vue";
 import { eatApi } from "@/api/api.js";
 //获取应用实例
 const app = getApp();
@@ -100,7 +94,7 @@ let upper = (e) => {
 let lower = (e) => {
   console.log(e);
 };
-let scroll = (e) => {};
+let scroll = (e) => { };
 </script>
 
 <style lang="scss" scoped>
