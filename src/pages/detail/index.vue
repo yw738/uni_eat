@@ -112,8 +112,8 @@
               plain
               color="#666"
               size="small"
-              v-if="collectionData[item.shopId]"
-              @click="addCollection(false, item.shopId)"
+              v-if="collectionData[item.id]"
+              @click="addCollection(false, item.id)"
             >
               取消收藏
             </up-button>
@@ -125,7 +125,7 @@
               color="#666"
               size="small"
               v-else
-              @click="addCollection(true, item.shopId, index)"
+              @click="addCollection(true, item.id, index)"
             >
               收藏
             </up-button>
@@ -318,10 +318,10 @@ let isLoading = ref(false);
 /**
  * 添加||取消收藏 0.8s的请求cd
  * @param {boolean} bool true 为新增收藏， false 为取消收藏
- * @param {string} shopId 店铺id
+ * @param {string} id 店铺id
  * @param {number} num 店铺 在当前视频的位置 || 下标
  */
-let addCollection = async (bool, shopId, num = 0) => {
+let addCollection = async (bool, id, num = 0) => {
   if (isLoading.value) {
     uni.showToast({
       title: "请不要频繁点击！",
@@ -342,11 +342,11 @@ let addCollection = async (bool, shopId, num = 0) => {
         userId,
         videoId,
         num,
-        shopId,
+        shopId:id,
       };
       await eatApi.addCollection(json).then((res) => {
         if (res.code == 0) {
-          state.collectionData[shopId] = res.data.id;
+          state.collectionData[id] = res.data.id;
           uni.showToast({
             title: "收藏成功",
             icon: "none",
@@ -354,14 +354,14 @@ let addCollection = async (bool, shopId, num = 0) => {
         }
       });
     } else {
-      let id = state.collectionData[shopId];
+      let id = state.collectionData[id];
       await eatApi
         .delCollection({
           id: id,
         })
         .then((res) => {
           if (res.code == 0) {
-            delete state.collectionData[shopId];
+            delete state.collectionData[id];
             uni.showToast({
               title: "取消成功",
               icon: "none",
