@@ -58,7 +58,9 @@ let getList = () => {
     title: "加载中",
     mask: true,
   });
-  let params = { userId: app.globalData.openId };
+  let params = {
+    // userId: app.globalData.openId
+  };
   eatApi
     .getAllCollection(params)
     .then((res) => {

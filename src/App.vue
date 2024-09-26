@@ -41,9 +41,10 @@ export default {
         provider: "weixin", //如果是uniapp，在这里需要标明平台的类型，支持的参数请查阅uniapp官网的uni.login()文档
         success: (res) => {
           eatApi.getOpenId({ code: res.code }).then((cts) => {
-            let { openid } = cts;
-            this.$options.globalData.openId = openid;
-            uni.setStorageSync("openId", openid);
+            // openid 变更为 token 改为 jwt 鉴权
+            let { token } = cts;
+            this.$options.globalData.openId = token;
+            uni.setStorageSync("openId", token);
           });
         },
         fail: (err) => console.log(err), //登陆失败的回调

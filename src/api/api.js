@@ -6,8 +6,8 @@ export const eatApi = {
   getList: (data) => get("/api/v1/getList", data), //)
   getDetail: (data) => get("/api/v1/getDetail", data), //)
 
-  getOpenId: (data) => get("/api/getOpenId", data), //)
-  getUser: (id) => get(`/api/getUser/${id}`, {}), //)
+  getOpenId: (data) => get("/sApi/getOpenId", data), //)
+  getUser: (id) => get(`/api/getUser`, {}), //)
   addUser: (data) => post("/api/addUser", data), //)
   updateUser: (data) => post("/api/updateUser", data), //)
 
