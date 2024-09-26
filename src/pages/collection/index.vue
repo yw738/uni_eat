@@ -1,11 +1,17 @@
 <template>
   <view class="content">
     <view>
-      <scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper" @scrolltolower="lower"
-        @scroll="scroll">
+      <scroll-view
+        :scroll-top="scrollTop"
+        scroll-y="true"
+        class="scroll-Y"
+        @scrolltoupper="upper"
+        @scrolltolower="lower"
+        @scroll="scroll"
+      >
         <view class="list_box">
           <view class="list" v-for="(item, index) in tableData" :key="index">
-            <ScCard style="width: 100%" :data="item" />
+            <ScCard style="width: 100%" :data="item" @success="getList" />
           </view>
         </view>
       </scroll-view>
@@ -94,7 +100,7 @@ let upper = (e) => {
 let lower = (e) => {
   console.log(e);
 };
-let scroll = (e) => { };
+let scroll = (e) => {};
 </script>
 
 <style lang="scss" scoped>
