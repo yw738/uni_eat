@@ -71,6 +71,7 @@
     "@dcloudio/uni-stacktracey": "3.0.0-4020420240722002",
     "@dcloudio/vite-plugin-uni": "3.0.0-4020420240722002",
     "@vue/runtime-core": "^3.4.21",
+    "crypto-js": "^4.2.0",
     "sass": "^1.77.8",
     "sass-loader": "^10.5.2",
     "vite": "5.2.8"
