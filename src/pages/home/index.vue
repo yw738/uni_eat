@@ -104,6 +104,11 @@ let state = reactive({
 });
 let { scrollTop, list1, searchData, tableData, pagination } = toRefs(state);
 
+let uDropdownRef = ref();
+let closeDropdown = () => {
+  uDropdownRef.value.close();
+};
+
 onShow(() => {
   getList();
 });

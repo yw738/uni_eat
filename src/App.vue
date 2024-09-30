@@ -31,7 +31,7 @@ export default {
     // #ifdef H5
     this.$options.globalData.navHeight = 45;
     // #endif
-
+    return;
     // 获取 小程序用户唯一id
     const openId = uni.getStorageSync("openId");
     if (openId) {
